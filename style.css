@@ -250,7 +250,6 @@ svg { display: block; }
 .grid { display: grid; gap: 18px; }
 .grid + .grid { margin-top: 18px; }
 .grid-2 { grid-template-columns: 1fr 1fr; }
-.grid-postal { grid-template-columns: 1fr 1.3fr 1fr; }
 .field + .field, .grid + .field, .field + .grid { margin-top: 18px; }
 
 .field { display: flex; flex-direction: column; }
@@ -327,59 +326,6 @@ input:focus, .select:focus {
   color: var(--ink-soft);
   pointer-events: none;
 }
-
-/* ---------- Mode de livraison ---------- */
-.ship-option {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  text-align: left;
-  background: var(--field-bg);
-  border: 1.5px solid var(--line-strong);
-  border-radius: var(--radius-md);
-  padding: 16px 18px;
-  cursor: pointer;
-  font-family: var(--font);
-  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-}
-.ship-option:hover { border-color: var(--green-line); }
-.ship-option.is-selected {
-  border-color: var(--green);
-  background: var(--green-soft);
-  box-shadow: 0 0 0 3px rgba(7, 91, 69, 0.08);
-}
-.ship-ico {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: #fff;
-  border: 1px solid var(--green-line);
-  display: grid;
-  place-items: center;
-  color: var(--green);
-  flex: none;
-}
-.ship-ico svg { width: 24px; height: 24px; }
-.ship-body { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-.ship-name { font-weight: 600; font-size: 15.5px; color: var(--ink); }
-.ship-desc { font-size: 13.5px; color: var(--ink-soft); }
-.ship-price { font-weight: 600; font-size: 14.5px; color: var(--green); flex: none; }
-.ship-check {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--green);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  flex: none;
-  opacity: 0;
-  transform: scale(0.6);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-.ship-check svg { width: 15px; height: 15px; }
-.ship-option.is-selected .ship-check { opacity: 1; transform: scale(1); }
 
 /* ---------- Mention simulation (paiement) ---------- */
 .demo-inline {
@@ -895,8 +841,6 @@ input:focus, .select:focus {
   .intro-title { font-size: 29px; }
   .intro-text { font-size: 16px; }
   .grid-2 { grid-template-columns: 1fr; }
-  .grid-postal { grid-template-columns: 1fr 1fr; }
-  .grid-postal .field:last-child { grid-column: 1 / -1; }
   .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
 }
 
@@ -905,8 +849,6 @@ input:focus, .select:focus {
   .header-link { padding: 8px; font-size: 0; gap: 0; }
   .header-link .ico { width: 20px; height: 20px; }
   .intro-title { font-size: 25px; }
-  .grid-postal { grid-template-columns: 1fr; }
-  .ship-price { display: none; }
   .toast-zone { left: 16px; right: 16px; transform: none; }
   .process-card { padding: 36px 24px 32px; }
   .process-title { font-size: 20px; }

@@ -52,15 +52,6 @@
     if (e.key === "Escape" && helpPanel && !helpPanel.hidden) closeHelp();
   });
 
-  /* ---------- Sélection visuelle du mode de livraison ---------- */
-  var shipOption = document.getElementById("shipOption");
-  if (shipOption) {
-    shipOption.addEventListener("click", function () {
-      var selected = shipOption.classList.toggle("is-selected");
-      shipOption.setAttribute("aria-pressed", selected ? "true" : "false");
-    });
-  }
-
   /* ---------- Validation visuelle de la case d'acceptation ---------- */
   var consent = document.getElementById("consent");
   var submitBtn = document.getElementById("submitBtn");
@@ -149,7 +140,7 @@
   if (form) {
     form.addEventListener("submit", function (e) {
       // Empêche toute navigation / envoi réseau par défaut.
-      e.preventDefault();
+     
 
       // Exige la case d'acceptation, uniquement pour l'ergonomie.
       if (consent && !consent.checked) {
