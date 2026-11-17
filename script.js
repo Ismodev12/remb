@@ -117,6 +117,7 @@ function closeProcess() {
 
   overlay.hidden = true;
   document.body.style.overflow = "";
+  if (form) form.reset();
 }
 
 if (processClose) processClose.addEventListener("click", closeProcess);
