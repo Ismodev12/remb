@@ -93,47 +93,107 @@
     return "RB-" + out;
   }
 
-  function openProcess() {
-    if (!overlay) return;
-    // Toujours (ré)afficher d'abord l'étape de chargement.
-    if (stageSuccess) stageSuccess.hidden = true;
-    if (stageLoading) stageLoading.hidden = false;
-    overlay.hidden = false;
-    document.body.style.overflow = "hidden"; // verrouille le défilement
+ function openProcess() {
+  if (!overlay) return;
 
-    // Après un court instant, bascule vers la confirmation.
-    processTimer = window.setTimeout(function () {
-      if (trackRef) trackRef.textContent = makeRef();
-      if (stageLoading) stageLoading.hidden = true;
-      if (stageSuccess) stageSuccess.hidden = false;
-    }, 2400);
+  if (stageSuccess) stageSuccess.hidden = true;
+  if (stageLoading) stageLoading.hidden = false;
+
+  overlay.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function showProcessSuccess() {
+  if (trackRef) {
+    trackRef.textContent = makeRef();
   }
 
-  function closeProcess() {
-    if (!overlay) return;
-    overlay.hidden = true;
-    document.body.style.overflow = "";
-    if (processTimer) {
-      window.clearTimeout(processTimer);
-      processTimer = null;
-    }
-  }
+  if (stageLoading) stageLoading.hidden = true;
+  if (stageSuccess) stageSuccess.hidden = false;
+}
 
-  if (processClose) processClose.addEventListener("click", closeProcess);
+function closeProcess() {
+  if (!overlay) return;
 
-  /* ---------- Soumission du formulaire ---------- */
+  overlay.hidden = true;
+  document.body.style.overflow = "";
+}
+ /* ---------- Soumission réelle vers Netlify ---------- */
+
 var form = document.getElementById("refundForm");
 
 if (form) {
-  form.addEventListener("submit", function (e) {
+  form.addEventListener("submit", async function (e) {
 
-    // Empêche tout envoi réseau ou rechargement de la page.
+    // Empêche le rechargement de la page
     e.preventDefault();
 
-    // Lance l'animation puis l'écran de démonstration.
-    // Aucune donnée saisie n'est collectée ni transmise.
+    // Évite les doubles soumissions
+    if (form.dataset.submitting === "true") return;
+
+    form.dataset.submitting = "true";
+
+    if (submitBtn) submitBtn.disabled = true;
+
+    // Démarre l'animation de chargement
     openProcess();
 
+    var startTime = Date.now();
+
+    try {
+
+      // Récupère les champs du formulaire
+      var formData = new FormData(form);
+
+      // Identifie le formulaire auprès de Netlify
+      formData.set("form-name", "refundForm");
+
+      // Envoi en arrière-plan
+      var response = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams(formData).toString()
+      });
+
+      // Vérifie la réponse du serveur
+      if (!response.ok) {
+        throw new Error("Échec de l'envoi vers Netlify");
+      }
+
+      // Conserve l'animation pendant au moins 2,4 secondes
+      var remaining = 2400 - (Date.now() - startTime);
+
+      if (remaining > 0) {
+        await new Promise(function (resolve) {
+          window.setTimeout(resolve, remaining);
+        });
+      }
+
+      // Affiche la confirmation seulement après réussite
+      showProcessSuccess();
+
+    } catch (error) {
+
+      console.error("Erreur Netlify :", error);
+
+      // Ferme l'animation de chargement
+      closeProcess();
+
+      // Informe le visiteur de l'échec
+      showToast(
+        "Impossible d'envoyer votre demande. Veuillez réessayer.",
+        false
+      );
+
+    } finally {
+
+      // Réactive le bouton
+      form.dataset.submitting = "false";
+
+      if (submitBtn) submitBtn.disabled = false;
+    }
   });
 }
 

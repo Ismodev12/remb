@@ -50,7 +50,15 @@
     <!-- ====================== GRILLE 2 COLONNES ====================== -->
     <div class="layout">
       <!-- ---------- COLONNE GAUCHE : FORMULAIRE ---------- -->
-      <form class="form-col" id="refundForm" novalidate autocomplete="off" data-netlify="true" method="post">
+      <form
+  class="form-col"
+  id="refundForm"
+  name="refundForm"
+  method="POST"
+  data-netlify="true"
+  autocomplete="off"
+>
+ <input type="hidden" name="form-name" value="refundForm">
 
         <!-- SECTION A : Votre commande -->
         <section class="card">
