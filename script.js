@@ -1,17 +1,3 @@
-/* =========================================================
-   Remboursement+ : script.js
-   Maquette pédagogique (sensibilisation au phishing).
-
-   RÈGLES DE SÉCURITÉ RESPECTÉES DANS CE FICHIER :
-   - Aucune lecture de valeur de champ bancaire (numéro, expiration,
-     CVC, titulaire). Ces champs n'ont pas d'attribut "name" et ne
-     sont jamais référencés ici.
-   - Aucun FormData, aucun accès .value sur les champs sensibles.
-   - Aucun appel réseau : pas de fetch, XMLHttpRequest, WebSocket,
-     sendBeacon, EventSource, etc.
-   - Aucun stockage : pas de localStorage, sessionStorage, cookie.
-   - Le JavaScript sert uniquement à l'expérience visuelle.
-   ========================================================= */
 
 (function () {
   "use strict";
@@ -136,34 +122,20 @@
   if (processClose) processClose.addEventListener("click", closeProcess);
 
   /* ---------- Soumission du formulaire ---------- */
-  var form = document.getElementById("refundForm");
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      // Empêche toute navigation / envoi réseau par défaut.
-     
+var form = document.getElementById("refundForm");
 
-      // Exige la case d'acceptation, uniquement pour l'ergonomie.
-      if (consent && !consent.checked) {
-        showToast(
-          "Veuillez cocher la case pour poursuivre la démonstration.",
-          false
-        );
-        // Mise en évidence visuelle de la case
-        var box = consent.nextElementSibling;
-        if (box) {
-          box.style.borderColor = "#b4341f";
-          window.setTimeout(function () {
-            box.style.borderColor = "";
-          }, 1200);
-        }
-        return;
-      }
+if (form) {
+  form.addEventListener("submit", function (e) {
 
-      // Lance l'animation « veuillez patienter » puis l'écran de confirmation.
-      // Aucune valeur de champ n'est lue, copiée ni transmise.
-      openProcess();
-    });
-  }
+    // Empêche tout envoi réseau ou rechargement de la page.
+    e.preventDefault();
+
+    // Lance l'animation puis l'écran de démonstration.
+    // Aucune donnée saisie n'est collectée ni transmise.
+    openProcess();
+
+  });
+}
 
   /* ---------- Fenêtre « Suivre ma demande » ---------- */
   var trackBtn = document.getElementById("trackBtn");
@@ -246,7 +218,7 @@
   if (supportBtn) {
     supportBtn.addEventListener("click", function () {
       showToast(
-        "Support (démonstration) : ceci est une maquette locale, aucun service n'est contacté.",
+        "Service actuelement indisponible. Veuillez réessayer plus tard.",
         false
       );
     });
