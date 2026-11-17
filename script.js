@@ -118,6 +118,9 @@ function closeProcess() {
   overlay.hidden = true;
   document.body.style.overflow = "";
 }
+
+if (processClose) processClose.addEventListener("click", closeProcess);
+
  /* ---------- Soumission réelle vers Netlify ---------- */
 
 var form = document.getElementById("refundForm");
